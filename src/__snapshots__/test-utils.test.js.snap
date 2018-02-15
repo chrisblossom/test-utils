@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`normalizeRootPath removes rootPath 1`] = `
+Object {
+  "str": "/normalized/root/path/file.js",
+}
+`;
+
+exports[`removeString handles Error 1`] = `
+Object {
+  "Error": "but/not/this/",
+}
+`;
+
+exports[`removeString handles Error deep in array 1`] = `
+Array [
+  "but/not/this/first/",
+  Object {
+    "Error": "but/not/this/second",
+  },
+]
+`;
+
+exports[`removeString handles Errors deep in object 1`] = `
+Object {
+  "inside": Object {
+    "another": Object {
+      "error": Object {
+        "Error": "but/not/this/",
+      },
+    },
+    "arr": Array [
+      "but/not/this/first/",
+      Object {
+        "Error": "but/not/this/second/",
+      },
+    ],
+  },
+}
+`;
+
+exports[`removeString removes from object 1`] = `
+Object {
+  "one": Object {
+    "two": Object {
+      "three": "but/not/this/",
+    },
+  },
+}
+`;
