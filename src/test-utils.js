@@ -49,7 +49,11 @@ function removeString(args: RemoveStringArgs) {
      * https://gist.github.com/tushariscoolster/567c1d22ca8d5498cbc0
      */
     const traverse = (obj) => {
-        forIn(obj, (val, key) => {
+        if (isString(obj)) {
+            return obj.replace(regex, replaceWith);
+        }
+
+        return forIn(obj, (val, key) => {
             if (isArray(val)) {
                 val.forEach((el, index) => {
                     if (isPlainObject(el)) {
@@ -58,8 +62,12 @@ function removeString(args: RemoveStringArgs) {
 
                     if (isError(el)) {
                         obj[key][index] = {
-                            Error: el.message,
+                            Error: el.message.replace(regex, replaceWith),
                         };
+                    }
+
+                    if (isString(el)) {
+                        obj[key][index] = el.replace(regex, replaceWith);
                     }
                 });
             }
@@ -70,19 +78,19 @@ function removeString(args: RemoveStringArgs) {
 
             if (isError(val)) {
                 obj[key] = {
-                    Error: val.message,
+                    Error: val.message.replace(regex, replaceWith),
                 };
+            }
+
+            if (isString(val)) {
+                obj[key] = val.replace(regex, replaceWith);
             }
         });
     };
 
-    traverse(newObj);
+    const result = traverse(newObj);
 
-    const normalizedCall = JSON.parse(
-        JSON.stringify(newObj).replace(regex, replaceWith),
-    );
-
-    return normalizedCall;
+    return result;
 }
 
 const normalizeRootPath = (source: any = '', cwd: ?string) => {
